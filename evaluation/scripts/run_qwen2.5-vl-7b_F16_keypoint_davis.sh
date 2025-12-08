@@ -1,0 +1,66 @@
+##### Set Config
+## Model
+MODEL_NAME_QWEN2VL_2B="qwen2-vl-2b-rvos"
+VERSION_QWEN2VL_2B="ckpts/Qwen2-VL-2B-Instruct"
+MODEL_NAME_QWEN2_5VL_3B="qwen2-5-vl-3b-rvos"
+VERSION_QWEN2_5VL_3B="ckpts/Qwen2.5-VL-3B-Instruct"
+MODEL_NAME_QWEN2VL_7B="qwen2-vl-7b-rvos"
+VERSION_QWEN2VL_7B="ckpts/Qwen2-VL-7B-Instruct"
+MODEL_NAME_QWEN2_5VL_7B="qwen2-5-vl-7b-rvos"
+VERSION_QWEN2_5VL_7B="ckpts/Qwen2.5-VL-7B-Instruct"
+
+# Select model and version
+MODEL_NAME=${MODEL_NAME_QWEN2_5VL_7B}
+VERSION=${VERSION_QWEN2_5VL_7B}
+
+## Data
+DATA_NAME_REVOS="revos_valid"
+DATA_CFG_REVOS="--dataset revos"
+EVAL_DATA_CFG_REVOS="--exp_path datasets/RVOSJoint/ReVOS/meta_expressions_valid_.json \
+                --mask_path datasets/RVOSJoint/ReVOS/mask_dict.json \
+                --foreground_mask_path datasets/RVOSJoint/ReVOS/mask_dict_foreground.json"
+DATA_NAME_DAVIS="davis_valid"
+DATA_CFG_DAVIS="--dataset davis"
+EVAL_DATA_CFG_DAVIS="--exp_path datasets/RVOSJoint/davis17/meta_expressions/valid/meta_expressions.json \
+            --mask_path datasets/RVOSJoint/davis17/valid/mask_dict.pkl"
+DATA_NAME_REASONVOS="reasonvos_valid"
+DATA_CFG_REASONVOS="--dataset reasonvos"
+EVAL_DATA_CFG_REASONVOS="--exp_path datasets/RVOSJoint/ReasonVOS/meta_expressions_v2.json \
+            --mask_path datasets/RVOSJoint/ReasonVOS/mask_dict_v2.pkl"
+
+# Select dataset and config
+DATA_NAME=${DATA_NAME_DAVIS}
+DATA_CFG=${DATA_CFG_DAVIS}
+EVAL_DATA_CFG=${EVAL_DATA_CFG_DAVIS}
+
+## Attention Score
+ATTN_NUM_FRAME=16
+attn_layer_idx_start=14
+attn_layer_idx_end=-1 # -1 means the last layer
+ATTN_MS_CFG="--attn_max_token 400 --attn_resize_scale 2 --attn_max_batch 4"
+
+ATTN_NAME="F${ATTN_NUM_FRAME}_L${attn_layer_idx_start}-${attn_layer_idx_end}"
+ATTN_SCORE_FOLDER="./attn_weights/${MODEL_NAME}/${ATTN_NAME}/${DATA_NAME}"
+ATTN_SCORE_CFG="--num_input_frames=${ATTN_NUM_FRAME} --attn_save_path=${ATTN_SCORE_FOLDER} --attn_layer_idx_start ${attn_layer_idx_start}"
+## Mask Inference
+MASK_NUM_FRAME=16
+INF_NAME="inf-uniform-F${MASK_NUM_FRAME}"
+MASK_CFG="--num_input_frames=${MASK_NUM_FRAME} --attn_save_path=${ATTN_SCORE_FOLDER} --use_saved_attn"
+ATTN_MASK_CFG="${MASK_CFG} --predict_attn_mask"
+##### Set Config
+
+##### Obtain Keypoints
+GPU_LIST=(7)
+SUBSET_NUM=${#GPU_LIST[@]}
+KEYPOINT_FOLDER="./outputs/${MODEL_NAME}/${ATTN_NAME}/${INF_NAME}-keypoint/${DATA_NAME}"
+echo "▶ Starting inference for Keypoints..."
+for ((i=0; i<$SUBSET_NUM; i++)); do
+    CUDA_VISIBLE_DEVICES=${GPU_LIST[i]} PYTHONPATH=$(pwd) python evaluation/inference_keypoints.py \
+    --subset_num=${SUBSET_NUM} --subset_idx=$i --version=$VERSION \
+    --vis_save_path=${KEYPOINT_FOLDER} ${DATA_CFG} ${ATTN_MASK_CFG} &
+done
+wait
+echo "(${DATA_NAME}) All Completed for Keypoints"
+PYTHONPATH=$(pwd) python evaluation/eval_rvos_keypoints.py ${KEYPOINT_FOLDER} ${EVAL_DATA_CFG} --offset 14
+echo Evaluate ${KEYPOINT_FOLDER}
+#### Obtain Keypoints

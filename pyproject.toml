@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decaf"
+version = "1.0"
+description = "DecAF: Decomposed Attention Fusion in MLLMs for Training-Free Video Reasoning Segmentation"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "transformers==4.52.1", "qwen-vl-utils==0.0.11",
+    "accelerate==1.9.0", "bitsandbytes",
+    "markdown2[all]", "numpy==1.26.0", "pandas", "scikit-learn==1.2.2",
+    "einops==0.6.1", "einops-exts==0.0.4", "termcolor",
+    "ninja", "pycocotools==2.0.8", "opencv-python", "scikit-image"
+]
+
+[tool.setuptools]
+packages = ["evaluation", "model"]
