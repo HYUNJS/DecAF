@@ -37,14 +37,14 @@ python -m pip install --no-build-isolation -v -e .
 We use absolute paths for dataset directories in `evaluation/inf_utils.py`.  
 You can modify the following variables and the file paths used in `get_dataset(...)` as needed:
 
-```python
-YTVOS_DATA_ROOT    = "datasets/RVOSJoint/ref-youtube-vos"
-DAVIS_DATA_ROOT    = "datasets/RVOSJoint/davis17"
-MEVIS_DATA_ROOT    = "datasets/RVOSJoint/mevis"
-REVOS_DATA_ROOT    = "datasets/RVOSJoint/ReVOS"
+```bash
+YTVOS_DATA_ROOT     = "datasets/RVOSJoint/ref-youtube-vos"
+DAVIS_DATA_ROOT     = "datasets/RVOSJoint/davis17"
+MEVIS_DATA_ROOT     = "datasets/RVOSJoint/mevis"
+REVOS_DATA_ROOT     = "datasets/RVOSJoint/ReVOS"
 REASONVOS_DATA_ROOT = "datasets/RVOSJoint/ReasonVOS"
 
-Please organize your datasets following this structure:
+# Please organize your datasets following this structure:
 {project_root}/datasets/RVOSJoint/
 ├── davis17
 │   └── ...
@@ -55,7 +55,7 @@ Please organize your datasets following this structure:
 ├── mevis              
 └── ref-youtube-vos    
 
-For checkpoints, we assume the following structure:
+# For checkpoints, we assume the following structure:
 {project_root}/ckpts/
 ├── Qwen2.5-VL-7B-Instruct
 │   └── ...
@@ -67,7 +67,7 @@ sam2-hiera-large
     sam2_hiera_l.yaml
     sam2_hiera_large.pt
 
-Inference results are saved under:
+# Inference results are saved under:
 {project_root}/
 ├── attn_weights/
 │   └── ...
