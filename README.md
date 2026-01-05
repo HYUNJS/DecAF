@@ -4,7 +4,7 @@
 [arXiv](https://arxiv.org/abs/2510.19592) | [Project Page](https://www.jshyun.me/projects/decaf)
 
 ## Update
-* 🗓️ `Coming Soon`: Demo visualization code will be released!
+* 🗓️ `Jan 5, 2026`: Demo visualization code is released!
 * 🗓️ `Dec 9, 2025`: Code is released!
 
 ## 📝 TL;DR
