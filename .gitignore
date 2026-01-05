@@ -1,0 +1,21 @@
+# Python
+__pycache__
+*.pyc
+*.egg-info
+dist
+
+results
+runs
+ckpt/
+results/
+runs/
+.vscode/
+
+datasets
+ckpts
+outputs
+metrics
+attn_weights
+metrics*
+outputs*
+attn_weights*

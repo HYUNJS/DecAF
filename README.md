@@ -99,6 +99,34 @@ For ReVOS, mevis, and ref-youtube-vos, due to its large size, please download th
   You can adjust the variable `attn_max_batch` depending on your GPU memory. It controls the batch size for frame-wise (image-level) prompting. You can reduce it if you encounter OOM issues, or you can increase it to fully utilize high-end GPU.
 * To further reduce memory usage, you can modify the attention rollout implementation to use `bfloat16` instead of `float32`. In our experiments, this only causes a marginal performance drop (~0.x).
 
+## 🎬 Demo
+This demo script takes video frames and a natural language expression as input, and visualizes the extracted attention maps, point queries, coarse masks, and the dense masks obtained via SAM2.
+
+**How to run?**
+```bash
+# Default: save a single stacked visualization image
+python demo.py \
+  --video_path <PATH_TO_FRAMES_DIR> \
+  --exp "<EXPRESSION>" \
+  --vis_save_path <OUTPUT_DIR> \
+  --version ckpts/Qwen2.5-VL-7B-Instruct \
+  --vision_pretrained ckpts/sam2-hiera-large/sam2_hiera_large.pt
+```
+> **Note**  
+> By default, all visualizations (attention maps, point queries, coarse masks, and SAM2 masks) for **all frames** are stacked and saved into a **single image file**.  
+> If `--save_per_frame` is **added**, the visualizations are saved as **separate image files for each frame**.
+
+**Arguments** 
+- **`--video_path`**: **(required)** path to a directory containing video frames (e.g., `00000.jpg`, `00001.jpg`, ...)
+- **`--exp`**: **(required)** natural language expression describing the target object (e.g., "a person crossing over obstacles.")
+- **`--vis_save_path`**: directory to save visualizations (default: `./results/decaf_demo/`)
+- **`--save_per_frame`**: if set, the visualizations are saved as separate image files for each frame (default: off → saves a single stacked image)
+- **`--version`**: path to the MLLM checkpoint directory (default: `ckpts/Qwen2.5-VL-7B-Instruct`)
+- **`--vision_pretrained`**: path to the SAM2 checkpoint file (default: `ckpts/sam2-hiera-large/sam2_hiera_large.pt`)
+- **`--vision_pretrained_config`**: configuration file for SAM2 (default: `sam2_hiera_l.yaml`)
+- **`--point_threshold`**: threshold for point selection (default: 0.8)
+- **`--final_score_threshold`**: final score threshold (default: 0.8)
+
 
 ## Citation
 
