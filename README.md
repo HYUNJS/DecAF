@@ -1,4 +1,4 @@
-# Decomposed Attention Fusion in MLLMs for Training-Free Video Reasoning Segmentation
+# Decomposed Attention Fusion in MLLMs for Training-Free Video Reasoning Segmentation (ICLR 2026)
 
 
 [arXiv](https://arxiv.org/abs/2510.19592) | [Project Page](https://www.jshyun.me/projects/decaf)
